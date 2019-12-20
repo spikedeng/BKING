@@ -1,10 +1,11 @@
 <!--miniprogram/pages/refine/refine.js.wxml-->
 <view class="container">
-<view class="page-title">精选</view>
-<view wx:for="{{digestsArray}}">
-<view class="digest-container">
-<view class="content">{{item.content}}</view>
-<image class="image" src="{{item.image}}"></image>
-</view>
-</view>
+  <view class="page-title">精选</view>
+  <view class="digestsArray-container">
+    <view wx:for="{{digestsArray}}" class="digest-container" bindtap="onTapDigestCard" data-digest="{{item}}">
+      <view class="content">{{item.content}}</view>
+      <image class="image" src="{{item.image}}"  mode="aspectFit"></image>
+    </view>
+  </view>
+
 </view>

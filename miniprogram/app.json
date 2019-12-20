@@ -14,7 +14,8 @@
     "pages/openapi/callback/callback",
     "pages/openapi/cloudid/cloudid",
     "pages/im/im",
-    "pages/im/room/room"
+    "pages/im/room/room",
+    "pages/digest/digest"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",
@@ -23,27 +24,25 @@
     "navigationBarTitleText": "正在书入",
     "navigationBarTextStyle": "black"
   },
-  
-    "tabBar": {
-      "color": "#777",
-      "selectedColor": "#152D31",
-      "borderStyle": "white",
-      "list": [
-        {
+  "tabBar": {
+    "color": "#777",
+    "selectedColor": "#152D31",
+    "borderStyle": "white",
+    "list": [
+      {
         "pagePath": "pages/refine/refine",
         "text": "精选",
         "iconPath": "images/icon_tab1-min-unsel.png",
         "selectedIconPath": "images/icon_tab1-min.png"
       },
-        {
+      {
         "pagePath": "pages/booknote/booknote",
         "text": "笔记",
         "iconPath": "images/icon_tab2-min-unsel.png",
         "selectedIconPath": "images/icon_tab2-min.png"
       }
-      ]
-    },
-  
+    ]
+  },
   "sitemapLocation": "sitemap.json",
   "style": "v2"
 }

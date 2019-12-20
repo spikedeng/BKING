@@ -1,0 +1,14 @@
+<!--miniprogram/pages/digest/digest.wxml-->
+<view class="container">
+  <view class="digest-main-content">
+    {{content}}
+  </view>
+  <view class="line"></view>
+  <view class="origin">
+    {{origin}}
+  </view>
+  <view class="main-round-button" bindtap="onTapMainButton"></view>
+  <view class="digest-main-image">
+  <image src="{{image}}" mode="aspectFill"></image>
+  </view>
+</view>
