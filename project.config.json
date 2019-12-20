@@ -2,7 +2,7 @@
 	"miniprogramRoot": "miniprogram/",
 	"cloudfunctionRoot": "cloudfunctions/",
 	"setting": {
-		"urlCheck": true,
+		"urlCheck": false,
 		"es6": true,
 		"enhance": true,
 		"postcss": true,
@@ -10,6 +10,7 @@
 		"newFeature": true,
 		"coverView": true,
 		"autoAudits": false,
+		"uglifyFileName": true,
 		"checkInvalidKey": true,
 		"checkSiteMap": true,
 		"uploadWithSourceMap": true,
@@ -18,13 +19,14 @@
 			"disablePlugins": [],
 			"outputPath": ""
 		},
-		"uglifyFileName": true
+		"nodeModules": true
 	},
 	"appid": "wx15710740c9274108",
 	"projectname": "%E4%B8%80%E8%B5%B7%E4%B9%A6%E5%85%A5BKING",
 	"libVersion": "2.8.1",
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
+	"cloudfunctionTemplateRoot": "cloudfunctionTemplate",
 	"condition": {
 		"search": {
 			"current": -1,

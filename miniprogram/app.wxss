@@ -4,7 +4,41 @@
   flex-direction: column;
   align-items: center;
   box-sizing: border-box;
+  padding: 0 30px;
 } 
+
+.digest-container {
+  border: solid 1px #DADADA;
+  padding: 40rpx;
+  text-align: justify;
+  font-size: 38rpx;
+  font-weight: lighter;
+  line-height: 48rpx;
+  color: #515859;
+  box-shadow: 0px 2px 4px 0px #DADADA;
+  box-sizing: border-box;
+  margin-bottom: 48rpx;
+}
+
+.digest-container .content {
+  height: 280rpx;
+  overflow: hidden;
+  margin-bottom: 32rpx;
+}
+
+.digest-container .image {
+  height: 280rpx;
+}
+
+.page-title{
+  width: 100%;
+  margin-bottom: 44rpx;
+  padding: 0 30rpx;
+  font-size: 40px;
+  text-align: left;
+  font-weight: 600;
+  color: rgb(32, 79, 87);
+}
 
 button {
   background: initial;
