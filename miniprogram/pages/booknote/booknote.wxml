@@ -1,10 +1,18 @@
 <!--miniprogram/pages/refine/refine.js.wxml-->
 <view class="container">
-<view class="page-title">笔记本</view>
-<view wx:for="{{digestsArray}}">
-<view class="digest-container">
-<view class="content">{{item.content}}</view>
-<image class="image" src="{{item.image}}"></image>
-</view>
-</view>
+  <view class="header">
+    <view class="page-title">笔记本</view>
+    <view class="sidebutton">
+      <span style="margin: 0 20rpx 0 0;font-size: 48rpx">+</span>
+      <span>新建笔记</span>
+    </view>
+  </view>
+  <view class="digestsArray-container">
+    <view wx:for="{{digestsArray}}">
+      <view class="digest-container">
+        <view class="content">{{item.content}}</view>
+        <image class="image" src="{{item.image}}"></image>
+      </view>
+    </view>
+  </view>
 </view>
