@@ -1,14 +1,27 @@
 <!--miniprogram/pages/digest/digest.wxml-->
 <view class="container">
-  <view class="digest-main-content">
+  <view class="digest-main-content" wx:if="{{!editing}}">
     {{content}}
   </view>
+  <view class="digest-main-content" wx:if="{{editing}}">
+    <textarea placeholder="撰写摘要笔记" value="{{textareaValue}}" auto-height maxlength="300" bindinput="onContentChange">
+    </textarea>
+  </view>
   <view class="line"></view>
-  <view class="origin">
+  <view class="origin" wx:if="{{!editing}}">
     {{origin}}
   </view>
-  <view class="main-round-button" bindtap="onTapMainButton"></view>
-  <view class="digest-main-image">
-  <image src="{{image}}" mode="aspectFill"></image>
+  <view class="origin" wx:else>
+    <input placeholder="添加出处信息" bindfocus="onOriginFocusing" bindblur="onOriginBlur" bindinput="onOriginChange"></input>
+  </view>
+  <view class="main-round-button" bindtap="onTapMainButton" wx:if="{{content&&origin&&uploadedImagePath}}"></view>
+  <view class="main-round-button-disable" wx:else></view>
+  <view class="digest-main-image" bindtap="onImageSelect">
+    <view class="inner-wrapper" wx:if="{{uploadedImagePath}}">
+      <image src="{{uploadedImagePath}}" mode="aspectFill"></image>
+    </view>
+    <view style='width: 48rpx; height: 48rpx;' wx:else>
+      <image src="../../images/camera.png" mode="aspectFit"></image>
+    </view>
   </view>
 </view>
