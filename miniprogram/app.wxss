@@ -16,8 +16,29 @@
   color: #0a484f;
   font-weight: 500;
   position: fixed;
-  bottom: 30%;
-  left: 30px;
+  bottom: 29%;
+  left: 60rpx;
+  width: 500rpx;
+}
+
+.line {
+  /* align-self: flex-start; */
+  width: 200rpx;
+  margin-top: 30px;
+  height: 1rpx;
+  position: fixed;
+  bottom: 33%;
+  left: 60rpx;
+  background-color: #515859;
+}
+
+.lightbulb-main {
+  left: 40rpx;
+  bottom: 22.5%;
+  position: fixed;
+  width: 80rpx;
+  height: 80rpx;
+  z-index: 100;
 }
 
 .header {
@@ -55,8 +76,8 @@
   font-weight: 400;
   line-height: 48rpx;
   color: #515859;
-  margin-top: 20rpx;
-  max-height: 700rpx;
+  /* margin-top: 20rpx; */
+  /* max-height: 800rpx; */
   overflow: scroll;
   box-sizing: border-box;
   padding: 0 60rpx;
@@ -66,20 +87,9 @@ textarea {
   cursor: auto;
   width: 640rpx;
   margin: auto;
-  height: 150px;
+  /* height: 150px; */
   display: block;
   position: relative;
-}
-
-.line {
-  /* align-self: flex-start; */
-  width: 200rpx;
-  margin-top: 30px;
-  height: 1rpx;
-  position: fixed;
-  bottom: 34%;
-  left: 60rpx;
-  background-color: #515859;
 }
 
 .main-round-button {

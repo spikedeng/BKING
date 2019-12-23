@@ -17,12 +17,14 @@ exports.main = async(event, context) => {
     const {
       content,
       origin,
-      uploadedImagePath: image
+      uploadedImagePath: image,
+      _id: digestId
     } = item
     return {
       content,
       origin,
-      image
+      image,
+      digestId
     }
   })
   return result

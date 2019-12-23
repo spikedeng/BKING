@@ -2,16 +2,16 @@
 <view class="container">
   <view class="header">
     <view class="page-title">笔记本</view>
-    <view class="sidebutton">
+    <view class="sidebutton" bindtap="onNewButton">
       <span style="margin: 0 20rpx 0 0;font-size: 48rpx">+</span>
       <span>新建笔记</span>
     </view>
   </view>
   <view class="digestsArray-container">
-    <view wx:for="{{digestsArray}}">
+    <view wx:for="{{digestsArray}}" bindlongpress="onLongTap" data-digest="{{item}}" wx:key="{{item._id}}" bindtap="onTapDigestCard">
       <view class="digest-container">
         <view class="content">{{item.content}}</view>
-        <image class="image" src="{{item.image}}"></image>
+        <image class="image" src="{{item.image}}" mode="aspectFill"></image>
       </view>
     </view>
   </view>

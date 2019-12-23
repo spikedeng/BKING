@@ -5,8 +5,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    digestsArray: [
-      {
+    digestsArray: [{
         content: '在古希腊，一方的霸主与另一方霸主进行战争时，分别从属于两方的同盟国的军队也要参加。这种时候右翼的地位较为崇高，因而由本国的军队所占据，越往左翼地位越低，用来布置弱小同盟国的援军，对手也用同样的方法布阵。因此双方的右翼军队都努力击破对方的左翼军队，问题在于哪一方的右翼能够更快击破敌人的左翼，并乘胜席卷敌人的右翼。中国春秋时代的战争与此完全相同，右翼(右拒、右军)经常是地位崇高的位置。唯独本是蛮夷之国的楚国风俗与中原不同，主力置于左翼，因此中原诸国在与楚交战时必须考虑到这一点。',
         image: '../../images/demoimage-gqsd.png',
         origin: '—宫崎市定·宫崎市定中国史'
@@ -21,7 +20,7 @@ Page({
         image: '../../images/demoimage-szjdz.png',
         origin: '——盐野七生《文艺复兴是什么》'
       },
-      
+
       {
         content: '被选中的三位美人走进画室后，从头到脚告诉我什么叫做好看。那天十几位面试的男女模特从电梯里涌出来，简直像一片移动的森林，都比我高。时装模特儿是物种的一项反常，一项意外，好像是对人类的冒犯。不知道上帝怎么想，至少他们发育后会让爹妈吃一惊：为什么他们的上臂或小腿会比我们长那么多？两位女孩蹲下看画时，那么幼小，起身站直，身高简直猖狂，就跟折拢的尺子忽然打开一样。男模特小王坐那儿摆姿势，不画他时，他睡着了，比醒着时还要英俊。',
         image: '../../images/demoimage-cdq.jpeg',
@@ -77,10 +76,12 @@ Page({
     const digest = e.currentTarget.dataset.digest
     wx.navigateTo({
       url: '/pages/digest/digest',
-      events: e.currentTarget.dataset.digest,
+      events: {},
       success: function (res) {
         // 通过eventChannel向被打开页面传送数据
-        res.eventChannel.emit('acceptDataFromOpenerPage', { data: digest })
+        res.eventChannel.emit('acceptDataFromOpenerPage', {
+          ...digest, editing: false, uploadedImagePath: digest.image, scene: 'refine'
+        })
       }
     })
   },

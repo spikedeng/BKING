@@ -4,7 +4,7 @@
     {{content}}
   </view>
   <view class="digest-main-content" wx:if="{{editing}}">
-    <textarea placeholder="撰写摘要笔记" value="{{textareaValue}}" auto-height maxlength="300" bindinput="onContentChange">
+    <textarea placeholder="撰写摘要笔记" value="{{textareaValue}}" maxlength="300" bindinput="onContentChange" style="height: 780rpx; min-height: 500rpx">
     </textarea>
   </view>
   <view class="line"></view>
@@ -12,10 +12,17 @@
     {{origin}}
   </view>
   <view class="origin" wx:else>
-    <input placeholder="添加出处信息" bindfocus="onOriginFocusing" bindblur="onOriginBlur" bindinput="onOriginChange"></input>
+    <input placeholder="添加出处信息" bindfocus="onOriginFocusing" bindblur="onOriginBlur" bindinput="onOriginChange" style="font-weight: bold"></input>
   </view>
+  <block wx:if="{{scene!=='refine'}}">
   <view class="main-round-button" bindtap="onTapMainButton" wx:if="{{content&&origin&&uploadedImagePath}}"></view>
   <view class="main-round-button-disable" wx:else></view>
+   </block>
+   <block wx:else> 
+   <view class="lightbulb-main" bindtap="onTapLightBulb">
+   <image src="{{bulbLighted?'/images/bulb-light.png':'/images/bulb-dark.png'}}"></image>
+   </view>
+   </block>
   <view class="digest-main-image" bindtap="onImageSelect">
     <view class="inner-wrapper" wx:if="{{uploadedImagePath}}">
       <image src="{{uploadedImagePath}}" mode="aspectFill"></image>
