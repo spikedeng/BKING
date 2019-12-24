@@ -128,6 +128,8 @@ Page({
         if (scenekey === 'booknoteview') {
           if (res.tapIndex === 1) {
             page.deleteDigest()
+          } else if (res.tapIndex === 0) {
+            page.applyRefine(page.data.digestId)
           }
         } else if (scenekey === 'booknotecreate') {
           if (res.tapIndex === 1) {
