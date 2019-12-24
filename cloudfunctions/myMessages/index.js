@@ -1,4 +1,3 @@
-// 云函数入口文件
 const cloud = require('wx-server-sdk')
 
 cloud.init()
@@ -7,25 +6,19 @@ cloud.init()
 exports.main = async(event, context) => {
   const wxContext = cloud.getWXContext()
   const db = cloud.database()
-  const resp = await db.collection('digests')
-  .orderBy('createTime', 'desc')
-  .where({
+  const resp = await db.collection('messages').orderBy('createTime', 'desc').where({
     OPENID: wxContext.OPENID
   }).get()
   const result = resp.data.map(item => {
     const {
       content,
-      origin,
-      createTime,
-      uploadedImagePath: image,
-      _id: digestId
+      digestId,
+      createTime
     } = item
     return {
       content,
-      origin,
-      image,
-      createTime,
-      digestId
+      digestId,
+      createTime
     }
   })
   return result

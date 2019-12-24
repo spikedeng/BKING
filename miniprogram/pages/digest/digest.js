@@ -6,9 +6,9 @@ Page({
    */
   data: {
     // content: '',
-    content: '在古希腊，一方的霸主与另一方霸主进行战争时，分别从属于两方的同盟国的军队也要参加。这种时候右翼的地位较为崇高，因而由本国的军队所占据，越往左翼地位越低，用来布置弱小同盟国的援军，对手也用同样的方法布阵。因此双方的右翼军队都努力击破对方的左翼军队，问题在于哪一方的右翼能够更快击破敌人的左翼，并乘胜席卷敌人的右翼。中国春秋时代的战争与此完全相同，右翼(右拒、右军)经常是地位崇高的位置。唯独本是蛮夷之国的楚国风俗与中原不同，主力置于左翼，因此中原诸国在与楚交战时必须考虑到这一点。',
-    image: '../../images/demoimage-gqsd.png',
-    origin: '-宫崎市定《宫崎市定中国史》',
+    content: '',
+    image: '',
+    origin: '',
     scene: 'refine',
     editing: false,
     textareaValue: '',
@@ -26,11 +26,28 @@ Page({
     if (eventChannel && eventChannel.on)
       eventChannel.on('acceptDataFromOpenerPage', (data) => {
         console.log('event', data)
-
-        this.setData({
-          ...data
-        })
+        if (data.scene === 'mailbox')
+          this.loadDigest(data.digestId, data.scene)
+        else
+          this.setData({
+            ...data
+          })
       })
+  },
+
+  loadDigest(digestId, scene) {
+    wx.cloud.callFunction({
+      name: 'getDigestContent',
+      data: {
+        digestId,
+        scene
+      }
+    }).then(res => {
+      console.log('digestcontent', digestId)
+      this.setData({
+        ...res.result
+      })
+    })
   },
 
   onImageSelect() {
@@ -65,9 +82,26 @@ Page({
   },
 
   onTapLightBulb() {
-    this.setData({
-      bulbLighted: this.data.bulbLighted? false:true
+    const page = this
+    const {
+      bulbLighted,
+      digestId
+    } = this.data
+    const operation = bulbLighted ? 'off' : 'on'
+    wx.cloud.callFunction({
+      name: 'lightDigest',
+      data: {
+        digestId,
+        operation
+      }
+    }).then(res => {
+      console.log('lightbulb', res)
+      page.loadDigest(this.data.digestId, this.data.scene)
+      page.setData({
+        bulbLighted: bulbLighted ? false : true
+      })
     })
+
   },
 
   onTapMainButton() {
@@ -91,10 +125,18 @@ Page({
       itemList: sceneAction[scenekey].itemList,
       success(res) {
         console.log(res)
-        if (res.tapIndex === 1) {
-          page.saveDigest()
-        }
+        if (scenekey === 'booknoteview') {
+          if (res.tapIndex === 1) {
+            page.deleteDigest()
+          }
+        } else if (scenekey === 'booknotecreate') {
+          if (res.tapIndex === 1) {
+            page.saveDigest()
+          } else if (res.tapIndex === 0) {
+            page.saveDigest(true)
 
+          }
+        }
       },
       fail(res) {
         console.log(res.errMsg)
@@ -103,7 +145,26 @@ Page({
 
   },
 
-  saveDigest() {
+  deleteDigest() {
+    const {
+      digestId
+    } = this.data
+    wx.cloud.callFunction({
+      name: 'removeDigest',
+      data: {
+        digestId
+      },
+      success(res) {
+        console.log('deleteSucc', res)
+        wx.navigateBack({
+
+        })
+      }
+    })
+  },
+
+  saveDigest(applyAlong) {
+    const page = this
     const {
       content,
       uploadedImagePath,
@@ -117,14 +178,18 @@ Page({
         origin
       },
       success: res => {
-        wx.showToast({
-          title: '保存成功',
-          success(res) {
-            wx.navigateBack({
+        console.log('saveDigest', res)
+        if (applyAlong) {
+          page.applyRefine(res.result.digestId)
+        } else
+          wx.showToast({
+            title: '保存成功',
+            success(res) {
+              wx.navigateBack({
 
-            })
-          }
-        })
+              })
+            }
+          })
       },
       fail: err => {
         wx.showToast({
@@ -132,6 +197,28 @@ Page({
           title: '保存失败',
         })
         console.error('[云函数] [digests] 调用失败：', err)
+      }
+    })
+  },
+
+  applyRefine(digestId) {
+    const page = this
+    wx.cloud.callFunction({
+      name: 'applyRefine',
+      data: {
+        digestId: digestId
+      },
+      success(res) {
+        console.log('applySucc', res)
+        wx.showToast({
+          title: res.result.message,
+          success(res) {
+            wx.navigateBack()
+          }
+        })
+      },
+      fail(res) {
+        console.log('applyfail', res)
       }
     })
   },
@@ -146,7 +233,22 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
+    this.configLightStatus()
+  },
 
+  async configLightStatus () {
+    const page = this
+    const result = await wx.cloud.database({ env: wx.cloud.DYNAMIC_CURRENT_ENV}).collection('lights').where({
+        OPENID: getApp().globalData.OPENID,
+        digestId: page.data.digestId
+      }).get()
+    console.log('lightstatus', result.data[0].operation)
+    if (result.data.length) {
+      const lightData = result.data[0]
+      page.setData({
+        bulbLighted: lightData.operation === 'on'
+      })
+    }
   },
 
   onContentChange(e) {

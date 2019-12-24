@@ -5,20 +5,19 @@ cloud.init()
 
 // 云函数入口函数
 exports.main = async (event, context) => {
-  console.log('adddigestcloud',event)
   // return {msg:'ok'}
   const wxContext = cloud.getWXContext()
 
   const db = cloud.database()
-  const resp = await db.collection('digests').add({
+  await db.collection('messages').add({
     data: {
       ...event,
-      OPENID: wxContext.OPENID,
       createTime: db.serverDate()
     }
   })
-  console.log('adddigestcloud', resp)
+
   return {
-    digestId: resp._id
+    success: true,
+    message: '消息发送成功'
   }
 }

@@ -36,6 +36,23 @@ Page({
               page.loadMyNotes()
             }
           })
+        } else if (res.tapIndex === 0) {
+          wx.cloud.callFunction({
+            name: 'applyRefine',
+            data: {
+              digestId
+            },
+            success(res) {
+              console.log('applySucc', res)
+              wx.showToast({
+                title: res.result.message,
+              })
+              page.loadMyNotes()
+            },
+            fail(res) {
+              console.log(res)
+            }
+          })
         }
       }
     })
@@ -71,8 +88,14 @@ Page({
       name: "myBooknotes",
       data: {},
       success: res => {
+        const digestsArray = res.result.map(item => {
+          return {
+            ...item,
+            date: new Date(item.createTime).format('MM月dd日 hh:mm')
+          }
+        })
         page.setData({
-          digestsArray: res.result
+          digestsArray
         });
         console.log("mybooknote", res);
       },

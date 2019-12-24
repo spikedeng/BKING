@@ -1,0 +1,26 @@
+<!--miniprogram/pages/mailbox/mailbox.wxml-->
+
+<view class="container">
+  <view class="header">
+    <view class="page-title">邮箱</view>
+    <!-- <view style="flex: 1"> -->
+    <!-- <view class="avatar">
+      <open-data type="userAvatarUrl" class="avatar-opendata"></open-data>
+    </view> -->
+    <view class='points-wrapper'>
+      <view class="points">688
+      </view>
+      <view class="lightbulb-header" bindtap="onTapLightBulb">
+        <image src="/images/bulb-light.png"></image>
+      </view>
+    </view>
+
+    <!-- </view> -->
+  </view>
+  <view class="message-list-wrapper">
+    <view wx:for="{{messageList}}" wx:key="index" class="message-wrapper" bindtap="onTapMessage" data-message="{{item}}">
+      <view class="date">{{item.date||'12月19日'}}</view>
+      <view class="content">{{item.content}}</view>
+    </view>
+  </view>
+</view>

@@ -1,7 +1,7 @@
 <!--miniprogram/pages/refine/refine.js.wxml-->
 <view class="container">
   <view class="header">
-    <view class="page-title">笔记本</view>
+    <view class="page-title">笔记</view>
     <view class="sidebutton" bindtap="onNewButton">
       <span style="margin: 0 20rpx 0 0;font-size: 48rpx">+</span>
       <span>新建笔记</span>
@@ -10,6 +10,17 @@
   <view class="digestsArray-container">
     <view wx:for="{{digestsArray}}" bindlongpress="onLongTap" data-digest="{{item}}" wx:key="{{item._id}}" bindtap="onTapDigestCard">
       <view class="digest-container">
+      <view class="digest-header">
+        <view class="date">{{item.date}}</view>
+        <!-- <view class="light-count-wrapper">
+          <view class="lightbulb">
+            <image src="/images/bulb-light.png"></image>
+          </view>
+          <view class="lights">
+            {{item.lights}}
+          </view>
+        </view> -->
+      </view>
         <view class="content">{{item.content}}</view>
         <image class="image" src="{{item.image}}" mode="aspectFill"></image>
       </view>
