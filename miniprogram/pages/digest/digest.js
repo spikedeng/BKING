@@ -96,9 +96,9 @@ Page({
       }
     }).then(res => {
       console.log('lightbulb', res)
-      page.loadDigest(this.data.digestId, this.data.scene)
       page.setData({
-        bulbLighted: bulbLighted ? false : true
+        bulbLighted: bulbLighted ? false : true,
+        lights: page.data.lights + (bulbLighted? -1:+1)
       })
     })
 
