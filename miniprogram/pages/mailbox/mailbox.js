@@ -44,6 +44,9 @@ Page({
    */
   onShow: function () {
     this.getMessages()
+    this.setData({
+      lightsCount: getApp().globalData.lights
+    })
   },
 
   getMessages() {

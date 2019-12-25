@@ -8,7 +8,7 @@
       <open-data type="userAvatarUrl" class="avatar-opendata"></open-data>
     </view> -->
     <view class='points-wrapper'>
-      <view class="points">688
+      <view class="points">{{lightsCount}}
       </view>
       <view class="lightbulb-header" bindtap="onTapLightBulb">
         <image src="/images/bulb-light.png"></image>

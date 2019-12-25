@@ -26,7 +26,7 @@ exports.main = async(event, context) => {
       name: 'addMessage',
       data: {
         OPENID,
-        content: `恭喜ID为${digestIdTxt}的投稿被选为精选！`,
+        content: `恭喜ID${digestIdTxt}的投稿被选为精选！`,
         digestId
       }
     })

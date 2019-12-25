@@ -10,7 +10,6 @@ exports.main = async (event, context) => {
   const resp = await db.collection('refines')
     .orderBy('createTime', 'desc')
     .where({
-      OPENID: wxContext.OPENID,
       published: true
     }).get()
   const result = resp.data.map(item => {

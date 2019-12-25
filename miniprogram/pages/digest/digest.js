@@ -26,12 +26,13 @@ Page({
     if (eventChannel && eventChannel.on)
       eventChannel.on('acceptDataFromOpenerPage', (data) => {
         console.log('event', data)
-        if (data.scene === 'mailbox')
-          this.loadDigest(data.digestId, data.scene)
-        else
-          this.setData({
-            ...data
-          })
+        this.setData({
+          ...data
+        }, () => {
+          if (data.scene === 'mailbox') {
+            this.loadDigest(data.digestId, data.scene)
+          }
+        })
       })
   },
 
@@ -44,6 +45,7 @@ Page({
       }
     }).then(res => {
       console.log('digestcontent', digestId)
+      this.configLightStatus()
       this.setData({
         ...res.result
       })
@@ -98,7 +100,7 @@ Page({
       console.log('lightbulb', res)
       page.setData({
         bulbLighted: bulbLighted ? false : true,
-        lights: page.data.lights + (bulbLighted? -1:+1)
+        lights: page.data.lights + (bulbLighted ? -1 : +1)
       })
     })
 
@@ -235,15 +237,19 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
-    this.configLightStatus()
+    if (this.data.scene !== 'mailbox')
+      this.configLightStatus()
   },
 
-  async configLightStatus () {
+  async configLightStatus() {
+    console.log('configLightStatus')
     const page = this
-    const result = await wx.cloud.database({ env: wx.cloud.DYNAMIC_CURRENT_ENV}).collection('lights').where({
-        OPENID: getApp().globalData.OPENID,
-        digestId: page.data.digestId
-      }).get()
+    const result = await wx.cloud.database({
+      env: wx.cloud.DYNAMIC_CURRENT_ENV
+    }).collection('lights').where({
+      OPENID: getApp().globalData.OPENID,
+      digestId: page.data.digestId
+    }).get()
     console.log('lightstatus', result.data[0].operation)
     if (result.data.length) {
       const lightData = result.data[0]
@@ -271,7 +277,7 @@ Page({
     })
   },
 
-  onOriginBlue() {
+  onOriginBlur() {
     this.setData({
       originFocusing: false
     })

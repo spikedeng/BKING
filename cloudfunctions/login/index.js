@@ -33,25 +33,36 @@ exports.main = async(event, context) => {
     OPENID
   }).get()
   console.log('sameuser', sameUser)
-  if (sameUser.data.length == 0) {
+  const userDataAry = sameUser.data
+  if (userDataAry.length == 0) {
     const result = await users.add({
       data: {
         OPENID,
         APPID,
         UNIONID,
-        env
+        lights: 0,
+        isCommittee: true,
       }
     })
     console.log('useraddresult', result)
+    return {
+      OPENID,
+      lights: 0,
+      isComittee: true
+    }
+  } else {
+    const {
+      OPENID,
+      lights,
+      isCommittee
+    } = userDataAry[0]
+    return {
+      OPENID,
+      lights,
+      isCommittee
+    }
   }
 
-  return {
-    event,
-    openid: wxContext.OPENID,
-    appid: wxContext.APPID,
-    unionid: wxContext.UNIONID,
-    env: wxContext.ENV,
-  }
   // 可执行其他自定义逻辑
   // console.log 的内容可以在云开发云函数调用日志查看
 

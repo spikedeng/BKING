@@ -18,7 +18,8 @@ App({
         name: 'login',
         success(res) {
           console.log('loginsucc',res);
-          app.globalData.OPENID = res.result.openid
+          app.globalData = {...res.result}
+          
         }
       })
       // wx.cloud.callFunction({
