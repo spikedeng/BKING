@@ -22,6 +22,9 @@
     <view class="lightbulb-main" bindtap="onTapLightBulb">
       <image src="{{bulbLighted?'/images/bulb-light.png':'/images/bulb-dark.png'}}"></image>
     </view>
+    <view class="lightbulb-main-loading" bindtap="onTapLightBulb" wx:if="{{loading}}">
+      <image src="/images/bulb-mild.png"></image>
+    </view>
     <view class="lights-count">{{lights}}</view>
   </block>
   <view class="digest-main-image" bindtap="onImageSelect">

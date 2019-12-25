@@ -4,12 +4,16 @@ const cloud = require('wx-server-sdk')
 cloud.init()
 
 // 云函数入口函数
-exports.main = async (event, context) => {
+exports.main = async(event, context) => {
   const wxContext = cloud.getWXContext()
-  const { digestId } = event
+  const {
+    digestId
+  } = event
   const lightCl = cloud.database().collection('lights')
-  const lightQuery = await lightCl.where({digestId}).get()
-  if(lightQuery.data.length){
+  const lightQuery = await lightCl.where({
+    digestId
+  }).get()
+  if (!lightQuery.data.length) {
     await lightCl.add({
       data: {
         operation: 'off',
@@ -18,13 +22,15 @@ exports.main = async (event, context) => {
       }
     })
     const _ = cloud.database().command
-    await cloud.database().collection('users').where({OPENID: wxContext.OPENID}).update({
+    await cloud.database().collection('users').where({
+      OPENID: wxContext.OPENID
+    }).update({
       data: {
         lights: _.inc(1)
       }
     })
   }
   return {
-    
+
   }
 }

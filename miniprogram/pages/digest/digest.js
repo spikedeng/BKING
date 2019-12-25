@@ -15,6 +15,7 @@ Page({
     contentFocusing: false,
     originFocusing: false,
     bulbLighted: false,
+    loading: false,
   },
 
   /**
@@ -103,8 +104,12 @@ Page({
   },
 
   onTapLightBulb() {
+    if(this.data.loading) return
     const page = this
     wx.vibrateShort()
+    this.setData({
+      loading: true
+    })
     const {
       bulbLighted,
       digestId
@@ -131,7 +136,12 @@ Page({
       }
       page.setData({
         bulbLighted: bulbLighted ? false : true,
+        loading: false,
         lights: page.data.lights + (bulbLighted ? -1 : +1)
+      })
+    }).catch(res => {
+      page.setData({
+        loading: false
       })
     })
 

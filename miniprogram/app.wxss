@@ -40,6 +40,43 @@
   height: 80rpx;
   z-index: 100;
 }
+.lightbulb-main-loading {
+  left: 40rpx;
+  bottom: 22.5%;
+  position: fixed;
+  width: 80rpx;
+  height: 80rpx;
+  z-index: 100;
+  animation: bulbloading 2s infinite linear;
+}
+
+@keyframes bulbloading {
+  from {
+    opacity: 0.1;
+  }
+  10% {
+    opacity: 1;
+  }
+  15% {
+    opacity: 0.1;
+  }
+  40% {
+    opacity: 1;
+  }
+  45% {
+    opacity: 0.1;
+  }
+  50% {
+    opacity: 1;
+  }
+  55% {
+    opacity: 0.1;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
 
 .digest-header {
   display: flex;
