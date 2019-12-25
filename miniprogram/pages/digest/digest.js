@@ -31,9 +31,22 @@ Page({
         }, () => {
           if (data.scene === 'mailbox') {
             this.loadDigest(data.digestId, data.scene)
+            this.markReview()
           }
         })
       })
+  },
+
+  markReview() {
+    const {
+      digestId
+    } = this.data
+    wx.cloud.callFunction({
+      name: 'markReview',
+      data: {
+        digestId
+      }
+    })
   },
 
   loadDigest(digestId, scene) {
@@ -54,37 +67,44 @@ Page({
 
   onImageSelect() {
     const page = this
-    wx.chooseImage({
-      count: 1,
-      sizeType: ['compressed'],
-      sourceType: ['album', 'camera'],
-      success(res) {
-        // tempFilePath可以作为img标签的src属性显示图片
-        const [path] = res.tempFilePaths
-        const pathAry = path.split('/')
-        console.log('pathary', pathAry);
-        wx.showNavigationBarLoading()
-        wx.cloud.uploadFile({
-          cloudPath: pathAry[pathAry.length - 1], // 上传至云端的路径
-          filePath: path, // 小程序临时文件路径
-          success(res) {
-            // 返回文件 ID
-            console.log('cloudfileuploadsucc', res, this)
-            page.setData({
-              uploadedImagePath: res.fileID
-            })
-          },
-          complete: res => {
-            wx.hideNavigationBarLoading()
-          }
-        })
+    if (!this.data.editing) {
+      wx.previewImage({
+        urls: [this.data.uploadedImagePath],
+      })
+    } else {
+      wx.chooseImage({
+        count: 1,
+        sizeType: ['compressed'],
+        sourceType: ['album', 'camera'],
+        success(res) {
+          // tempFilePath可以作为img标签的src属性显示图片
+          const [path] = res.tempFilePaths
+          const pathAry = path.split('/')
+          console.log('pathary', pathAry);
+          wx.showNavigationBarLoading()
+          wx.cloud.uploadFile({
+            cloudPath: pathAry[pathAry.length - 1], // 上传至云端的路径
+            filePath: path, // 小程序临时文件路径
+            success(res) {
+              // 返回文件 ID
+              console.log('cloudfileuploadsucc', res, this)
+              page.setData({
+                uploadedImagePath: res.fileID
+              })
+            },
+            complete: res => {
+              wx.hideNavigationBarLoading()
+            }
+          })
 
-      }
-    })
+        }
+      })
+    }
   },
 
   onTapLightBulb() {
     const page = this
+    wx.vibrateShort()
     const {
       bulbLighted,
       digestId
@@ -98,6 +118,17 @@ Page({
       }
     }).then(res => {
       console.log('lightbulb', res)
+      const {
+        needPublish
+      } = res.result
+      if (needPublish) {
+        wx.cloud.callFunction({
+          name: 'rewardPublish',
+          data: {
+            digestId
+          }
+        })
+      }
       page.setData({
         bulbLighted: bulbLighted ? false : true,
         lights: page.data.lights + (bulbLighted ? -1 : +1)
