@@ -15,8 +15,8 @@
     <input placeholder="添加出处信息" bindfocus="onOriginFocusing" bindblur="onOriginBlur" bindinput="onOriginChange" style="font-weight: bold"></input>
   </view>
   <block wx:if="{{scene!=='refine'&&scene!=='mailbox'}}">
-    <view class="main-round-button" bindtap="onTapMainButton" wx:if="{{content}}"></view>
-    <view class="main-round-button-disable" wx:else></view>
+    <view class="{{buttonAnimate?'main-round-button-animated':'main-round-button'}}" bindtap="onTapMainButton"></view>
+    <!-- <view class="main-round-button-disable" wx:else></view> -->
   </block>
   <block wx:else>
     <view class="lightbulb-main" bindtap="onTapLightBulb">

@@ -16,6 +16,7 @@ Page({
     originFocusing: false,
     bulbLighted: false,
     loading: false,
+    buttonAnimate: false
   },
 
   /**
@@ -199,7 +200,13 @@ Page({
         console.log(res.errMsg)
       }
     })
-
+    wx.setStorage({
+      key: 'buttonAnimate',
+      data: true,
+    })
+    this.setData({
+      buttonAnimate: false
+    })
   },
 
   deleteDigest() {
@@ -227,6 +234,12 @@ Page({
       uploadedImagePath,
       origin
     } = this.data
+    if (!content) {
+      wx.showToast({
+        title: '未填写内容',
+      })
+      return
+    }
     wx.cloud.callFunction({
       name: 'addDigest',
       data: {
@@ -290,10 +303,22 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
+    const page = this
     if (this.data.scene !== 'mailbox') {
       console.log('configls1')
       this.configLightStatus()
     }
+    const buttonAnimate = wx.getStorage({
+      key: 'buttonAnimate',
+      success: function(res) {
+        console.log('buttonAnimate',res)
+      },
+      fail(res) {
+        page.setData({
+          buttonAnimate: true
+        })
+      }
+    })
   },
 
   async configLightStatus(digestIdP) {
