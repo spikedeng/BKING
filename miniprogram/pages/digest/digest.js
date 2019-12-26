@@ -30,6 +30,7 @@ Page({
         this.setData({
           ...data
         }, () => {
+          this.configLightStatus(data.digestId)
           if (data.scene === 'mailbox') {
             this.loadDigest(data.digestId, data.scene)
             this.markReview()
@@ -51,6 +52,7 @@ Page({
   },
 
   loadDigest(digestId, scene) {
+    const page = this
     wx.cloud.callFunction({
       name: 'getDigestContent',
       data: {
@@ -58,7 +60,7 @@ Page({
         scene
       }
     }).then(res => {
-      console.log('digestcontent', digestId)
+      console.log('digestcontent', page.data.digestId)
       this.configLightStatus()
       this.setData({
         ...res.result
@@ -104,7 +106,7 @@ Page({
   },
 
   onTapLightBulb() {
-    if(this.data.loading) return
+    if (this.data.loading) return
     const page = this
     wx.vibrateShort()
     this.setData({
@@ -278,20 +280,24 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
-    if (this.data.scene !== 'mailbox')
+    if (this.data.scene !== 'mailbox') {
+      console.log('configls1')
       this.configLightStatus()
+    }
   },
 
-  async configLightStatus() {
-    console.log('configLightStatus')
+  async configLightStatus(digestIdP) {
     const page = this
+    const digestId = digestIdP || page.data.digestId
+    if (!digestId) return
+    console.log('configLightStatus', digestId)
     const result = await wx.cloud.database({
       env: wx.cloud.DYNAMIC_CURRENT_ENV
     }).collection('lights').where({
       OPENID: getApp().globalData.OPENID,
-      digestId: page.data.digestId
+      digestId
     }).get()
-    console.log('lightstatus', result.data[0].operation)
+    console.log('lightstatus', result.data)
     if (result.data.length) {
       const lightData = result.data[0]
       page.setData({

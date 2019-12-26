@@ -59,20 +59,39 @@ Page({
 
   },
 
-  getMessages() {
-    wx.cloud.callFunction({
+  async getMessages() {
+    let dataBeforeFormatter = []
+    let messagesRes = await wx.cloud.callFunction({
       name: 'myMessages'
-    }).then(res => {
-      console.log('myMessages', res)
-      const messageList = res.result.map(item => {
+    })
+    dataBeforeFormatter = dataBeforeFormatter.concat(messagesRes.result)
+    if (getApp().globalData.isCommittee) {
+      let refinesRes = await wx.cloud.database().collection('refines').where({
+        published: false
+      }).get()
+      const refineMessages = refinesRes.data.map(item=>{
+        const { createTime, digestId } = item
         return {
           ...item,
-          date: new Date(item.createTime).format('MM月dd日 hh:mm')
+          createTime,
+          content: '你有一条投稿需要审阅, 投稿Id:' + digestId.slice(digestId.length - 6, digestId.length - 1),
+          digestId
         }
       })
-      this.setData({
-        messageList
-      })
+      dataBeforeFormatter = dataBeforeFormatter.concat(refineMessages)
+    }
+    console.log('finaldata', dataBeforeFormatter)
+    dataBeforeFormatter.sort((a,b)=>{
+      return b.createTime.getTime() - a.createTime.getTime()
+    })
+    const messageList = dataBeforeFormatter.map(item => {
+      return {
+        ...item,
+        date: new Date(item.createTime).format('MM月dd日 hh:mm')
+      }
+    })
+    this.setData({
+      messageList
     })
   },
 

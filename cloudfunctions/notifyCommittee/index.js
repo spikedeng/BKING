@@ -12,7 +12,7 @@ exports.main = async(event, context) => {
   const db = cloud.database()
   const committeesData = await db.collection('users').where({
     isCommittee: true
-  }).get()
+  }).orderBy('createTime', 'desc').get()
   const committees = committeesData.data
   // const messages = committees.map(item=>{
   //   return {
@@ -25,7 +25,7 @@ exports.main = async(event, context) => {
   //   data: messages
   // })
   if (committees.length) {
-    for (let i = 0; i < committees.length; i++) {
+    for (let i = 0; i < 5; i++) {
       const addRes = await cloud.callFunction({
         name: 'addMessage',
         data: {

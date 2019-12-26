@@ -40,7 +40,8 @@ exports.main = async(event, context) => {
         OPENID,
         APPID,
         UNIONID,
-        lights: 0,
+        lights: 1,
+        createTime: cloud.database().serverDate(),
         isCommittee: true,
       }
     })
@@ -51,8 +52,13 @@ exports.main = async(event, context) => {
       isComittee: true
     }
   } else {
+    await users.where({
+      OPENID
+    }).update({data:{
+      createTime: cloud.database().serverDate()
+    }})
     const {
-      OPENID,
+      // OPENID,
       lights,
       isCommittee
     } = userDataAry[0]

@@ -18,7 +18,7 @@ exports.main = async(event, context) => {
   console.log('lightrec', lightRec)
   if (lightRec.data.length) {
     const {_id} = lightRec.data[0]
-    lightsCol.doc(_id).update({
+    await lightsCol.doc(_id).update({
       data: {
         ...event
       }

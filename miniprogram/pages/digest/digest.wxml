@@ -31,7 +31,7 @@
     <view class="inner-wrapper" wx:if="{{uploadedImagePath&&content.length}}">
       <image src="{{uploadedImagePath}}" mode="aspectFill"></image>
     </view>
-    <view style='width: 48rpx; height: 48rpx;' wx:elif="{{uploadedImagePath&&content.length}}">
+    <view style='width: 48rpx; height: 48rpx;' wx:elif="{{editing}}">
       <image src="../../images/camera.png" mode="aspectFit"></image>
     </view>
   </view>
