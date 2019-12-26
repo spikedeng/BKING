@@ -3,8 +3,11 @@
   <view class="header">
     <view class="page-title">精选</view>
   </view>
+  <view wx:if="{{digestsArray.length===0}}" class="page-blank">
+    <p wx:if="{{loading}}">精选载入中...</p>
+  </view>
   <view class="digestsArray-container">
-    <view wx:for="{{digestsArray}}" class="digest-container" bindtap="onTapDigestCard" data-digest="{{item}}">
+    <view wx:for="{{digestsArray}}" class="digest-container" bindtap="onTapDigestCard" data-digest="{{item}}" wx:key="{{item.createTime}}">
       <view class="digest-header">
         <view class="date">{{item.date}}</view>
         <view class="light-count-wrapper">

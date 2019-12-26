@@ -15,7 +15,7 @@
     <input placeholder="添加出处信息" bindfocus="onOriginFocusing" bindblur="onOriginBlur" bindinput="onOriginChange" style="font-weight: bold"></input>
   </view>
   <block wx:if="{{scene!=='refine'&&scene!=='mailbox'}}">
-    <view class="main-round-button" bindtap="onTapMainButton" wx:if="{{content&&origin&&uploadedImagePath}}"></view>
+    <view class="main-round-button" bindtap="onTapMainButton" wx:if="{{content}}"></view>
     <view class="main-round-button-disable" wx:else></view>
   </block>
   <block wx:else>

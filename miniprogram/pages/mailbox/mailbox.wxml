@@ -17,6 +17,10 @@
 
     <!-- </view> -->
   </view>
+  <view wx:if="{{messageList.length===0}}" class="page-blank">
+    <p wx:if="{{loading}}">邮件载入中...</p>
+    <!-- <p wx:if="{{!loading}}">新建笔记并尝试投稿吧</p> -->
+  </view>
   <view class="message-list-wrapper">
     <view wx:for="{{messageList}}" wx:key="index" class="message-wrapper" bindtap="onTapMessage" data-message="{{item}}">
       <view class="date">{{item.date||'12月19日'}}</view>

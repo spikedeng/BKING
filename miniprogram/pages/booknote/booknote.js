@@ -4,7 +4,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    digestsArray: []
+    digestsArray: [],
+    loading: false
   },
   onNewButton() {
     wx.navigateTo({
@@ -84,6 +85,7 @@ Page({
 
   loadMyNotes() {
     const page = this;
+    this.setData({loading: true})
     wx.cloud.callFunction({
       name: "myBooknotes",
       data: {},
@@ -91,7 +93,8 @@ Page({
         const digestsArray = res.result.map(item => {
           return {
             ...item,
-            date: new Date(item.createTime).format('MM月dd日 hh:mm')
+            date: new Date(item.createTime).format('MM月dd日 hh:mm'),
+            briefId: item.digestId.slice(item.digestId.length - 6, item.digestId.length - 1)
           }
         })
         page.setData({
@@ -101,6 +104,9 @@ Page({
       },
       fail: err => {
         console.error("[云函数] [sum] 调用失败：", err);
+      },
+      complete: res => {
+        this.setData({loading: false})
       }
     });
   },

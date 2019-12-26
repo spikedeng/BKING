@@ -60,6 +60,7 @@ Page({
   },
 
   async getMessages() {
+    this.setData({ loading: true })
     let dataBeforeFormatter = []
     let messagesRes = await wx.cloud.callFunction({
       name: 'myMessages'
@@ -90,6 +91,7 @@ Page({
         date: new Date(item.createTime).format('MM月dd日 hh:mm')
       }
     })
+    this.setData({ loading: false })
     this.setData({
       messageList
     })

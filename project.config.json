@@ -58,10 +58,10 @@
 					"scene": null
 				},
 				{
-					"id": -1,
+					"id": 1,
 					"name": "笔记展示页",
 					"pathName": "pages/digest/digest",
-					"query": "",
+					"query": "digestId=b040a67a5e01b37a067af61564735511",
 					"scene": null
 				},
 				{

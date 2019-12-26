@@ -38,12 +38,12 @@ exports.main = async(event, context) => {
   console.log('addresult', result)
   //add messages to committee members
 
-  cloud.callFunction({
-    name: 'notifyCommittee',
-    data: {
-      digestId
-    }
-  })
+  // cloud.callFunction({
+  //   name: 'notifyCommittee',
+  //   data: {
+  //     digestId
+  //   }
+  // })
 
   return {
     success: true,

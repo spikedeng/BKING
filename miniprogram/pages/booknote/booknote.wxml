@@ -2,28 +2,35 @@
 <view class="container">
   <view class="header">
     <view class="page-title">笔记</view>
-    <view class="sidebutton" bindtap="onNewButton">
+    <!-- <view class="sidebutton" bindtap="onNewButton" wx:if="{{!loading}}">
+      <span style="margin: 0 20rpx 0 0;font-size: 48rpx">+</span>
+      <span>新建笔记</span>
+    </view> -->
+  </view>
+
+
+  <view class="digestsArray-container">
+    <view class="newbutton" bindtap="onNewButton">
       <span style="margin: 0 20rpx 0 0;font-size: 48rpx">+</span>
       <span>新建笔记</span>
     </view>
-  </view>
-  <view class="digestsArray-container">
     <view wx:for="{{digestsArray}}" bindlongpress="onLongTap" data-digest="{{item}}" wx:key="{{item._id}}" bindtap="onTapDigestCard">
       <view class="digest-container">
-      <view class="digest-header">
-        <view class="date">{{item.date}}</view>
-        <!-- <view class="light-count-wrapper">
-          <view class="lightbulb">
-            <image src="/images/bulb-light.png"></image>
+        <view class="digest-header">
+          <view class="date">{{item.date}}</view>
+          <view class="light-count-wrapper">
+            <view>
+              ID: {{item.briefId}}
+            </view>
           </view>
-          <view class="lights">
-            {{item.lights}}
-          </view>
-        </view> -->
-      </view>
+        </view>
         <view class="content">{{item.content}}</view>
         <image class="image" src="{{item.image}}" mode="aspectFill"></image>
       </view>
     </view>
+  </view>
+    <view wx:if="{{digestsArray.length===0}}" class="page-blank">
+    <p wx:if="{{loading}}">笔记载入中...</p>
+    <!-- <p wx:if="{{!loading}}">新建笔记并尝试投稿吧</p> -->
   </view>
 </view>

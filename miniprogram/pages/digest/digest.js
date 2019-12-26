@@ -23,20 +23,30 @@ Page({
    */
   onLoad: function(options) {
     console.log('digestoptions', options)
-    const eventChannel = this.getOpenerEventChannel()
-    if (eventChannel && eventChannel.on)
-      eventChannel.on('acceptDataFromOpenerPage', (data) => {
-        console.log('event', data)
-        this.setData({
-          ...data
-        }, () => {
-          this.configLightStatus(data.digestId)
-          if (data.scene === 'mailbox') {
-            this.loadDigest(data.digestId, data.scene)
-            this.markReview()
-          }
+    const {
+      digestId,
+      scene
+    } = options
+    if (digestId) {
+      this.loadDigest(digestId, scene)
+      this.configLightStatus(digestId)
+    } else {
+      const eventChannel = this.getOpenerEventChannel()
+      if (eventChannel && eventChannel.on)
+        eventChannel.on('acceptDataFromOpenerPage', (data) => {
+          console.log('event', data)
+          this.setData({
+            ...data
+          }, () => {
+            this.configLightStatus(data.digestId)
+            if (data.scene === 'mailbox') {
+              this.loadDigest(data.digestId, data.scene)
+              this.markReview()
+            }
+          })
         })
-      })
+    }
+
   },
 
   markReview() {
@@ -362,6 +372,15 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function() {
-
+    const {
+      digestId,
+      scene,
+      origin
+    } = this.data
+    return {
+      imageUrl: this.data.uploadedImagePath,
+      title: origin,
+      path: `/pages/digest/digest?digestId=${digestId}&scene=${scene}`
+    }
   }
 })
