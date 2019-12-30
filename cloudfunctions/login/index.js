@@ -42,14 +42,15 @@ exports.main = async(event, context) => {
         UNIONID,
         lights: 1,
         createTime: cloud.database().serverDate(),
-        isCommittee: true,
+        isCommittee: false,
       }
     })
     console.log('useraddresult', result)
     return {
       OPENID,
       lights: 0,
-      isComittee: true
+      isComittee: true,
+      newUser: true
     }
   } else {
     await users.where({
@@ -65,7 +66,8 @@ exports.main = async(event, context) => {
     return {
       OPENID,
       lights,
-      isCommittee
+      isCommittee,
+      newUser: false
     }
   }
 

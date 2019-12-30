@@ -12,7 +12,8 @@ exports.main = async(event, context) => {
   const digestData = await cloud.database().collection('refines').doc(digestId).get()
   console.log('digestData', digestData)
   const {
-    OPENID
+    OPENID,
+    uploadedImagePath
   } = digestData.data
   const digestIdTxt = digestId.slice(digestId.length - 6, digestId.length - 1)
 
@@ -20,8 +21,9 @@ exports.main = async(event, context) => {
     name: 'addMessage',
     data: {
       OPENID,
-      content: `恭喜ID${digestIdTxt}的投稿被选为精选！`,
-      digestId
+      content: `恭喜投稿${digestIdTxt}被选为精选`,
+      digestId,
+      uploadedImagePath
     }
   })
   const _ = cloud.database().command

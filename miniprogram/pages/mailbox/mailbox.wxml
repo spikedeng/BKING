@@ -3,10 +3,6 @@
 <view class="container">
   <view class="header">
     <view class="page-title">邮箱</view>
-    <!-- <view style="flex: 1"> -->
-    <!-- <view class="avatar">
-      <open-data type="userAvatarUrl" class="avatar-opendata"></open-data>
-    </view> -->
     <view class='points-wrapper'>
       <view class="points">{{lightsCount}}
       </view>
@@ -14,17 +10,15 @@
         <image src="/images/bulb-light.png"></image>
       </view>
     </view>
-
-    <!-- </view> -->
   </view>
   <view wx:if="{{messageList.length===0}}" class="page-blank">
     <p wx:if="{{loading}}">邮件载入中...</p>
-    <!-- <p wx:if="{{!loading}}">新建笔记并尝试投稿吧</p> -->
   </view>
   <view class="message-list-wrapper">
-    <view wx:for="{{messageList}}" wx:key="index" class="message-wrapper" bindtap="onTapMessage" data-message="{{item}}">
+    <view wx:for="{{messageList}}" wx:key="index" hover-class="message-wrapper-hover" class="message-wrapper" bindtap="onTapMessage" data-message="{{item}}">
       <view class="date">{{item.date||'12月19日'}}</view>
       <view class="content">{{item.content}}</view>
+      <view class="image"><image src="{{item.uploadedImagePath}}" mode="aspectFill"></image></view>
     </view>
   </view>
 </view>

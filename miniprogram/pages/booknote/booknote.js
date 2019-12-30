@@ -5,7 +5,8 @@ Page({
    */
   data: {
     digestsArray: [],
-    loading: false
+    loading: false,
+    pageNum:1
   },
   onNewButton() {
     wx.navigateTo({
@@ -88,15 +89,19 @@ Page({
     this.setData({loading: true})
     wx.cloud.callFunction({
       name: "myBooknotes",
-      data: {},
+      data: {
+        pageNum: page.data.pageNum
+      },
       success: res => {
-        const digestsArray = res.result.map(item => {
+        let digestsArray = res.result.map(item => {
           return {
             ...item,
             date: new Date(item.createTime).format('MM月dd日 hh:mm'),
             briefId: item.digestId.slice(item.digestId.length - 6, item.digestId.length - 1)
           }
         })
+        if (page.data.pageNum > 1)
+          digestsArray = page.data.digestsArray.concat(digestsArray)
         page.setData({
           digestsArray
         });
@@ -106,7 +111,7 @@ Page({
         console.error("[云函数] [sum] 调用失败：", err);
       },
       complete: res => {
-        this.setData({loading: false})
+        this.setData({loading: f})
       }
     });
   },
@@ -141,10 +146,18 @@ Page({
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function() {},
+  onReachBottom: function() {
+    const page = this
+    this.data.pageNum += 1
+    page.loadMyNotes()
+  },
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function() {}
+  onShareAppMessage: function () {
+    return {
+      title: ' '
+    }
+  }
 });

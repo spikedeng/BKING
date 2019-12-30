@@ -5,6 +5,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    pageNum: 1,
     messageList: [
 
     ]
@@ -60,38 +61,67 @@ Page({
   },
 
   async getMessages() {
-    this.setData({ loading: true })
+    const page = this
+    this.setData({
+      loading: true
+    })
     let dataBeforeFormatter = []
+    const {
+      isCommittee,
+      OPENID
+    } = getApp().globalData
     let messagesRes = await wx.cloud.callFunction({
-      name: 'myMessages'
+      name: 'myMessages',
+      data: {
+        pageNum: page.data.pageNum
+      }
     })
     dataBeforeFormatter = dataBeforeFormatter.concat(messagesRes.result)
-    if (getApp().globalData.isCommittee) {
-      let refinesRes = await wx.cloud.database().collection('refines').where({
-        published: false
-      }).get()
-      const refineMessages = refinesRes.data.map(item=>{
-        const { createTime, digestId } = item
-        return {
-          ...item,
-          createTime,
-          content: '你有一条投稿需要审阅, 投稿Id:' + digestId.slice(digestId.length - 6, digestId.length - 1),
-          digestId
-        }
-      })
-      dataBeforeFormatter = dataBeforeFormatter.concat(refineMessages)
-    }
-    console.log('finaldata', dataBeforeFormatter)
-    dataBeforeFormatter.sort((a,b)=>{
-      return b.createTime.getTime() - a.createTime.getTime()
+    let refinesRes = await wx.cloud.database().collection('refines').orderBy('createTime', 'desc').where({
+      published: false
+    }).limit(10).skip((page.data.pageNum - 1) * 10).get()
+
+    let refineMessages = refinesRes.data.map(item => {
+      const {
+        createTime,
+        digestId
+      } = item
+      const briefId = digestId.slice(digestId.length - 6, digestId.length - 1)
+      let content = '你有一条投稿需要审阅, 投稿Id:' + briefId
+      if (item.OPENID === OPENID) {
+        content = briefId + '稿件已送出，' + '还差' + (4 - item.lights) + '盏灯就能成为精选哦'
+      }
+      else if (!isCommittee && item.bulletin.length === 0)
+        return -1000
+      if(item.bulletin) content = item.bulletin
+      return {
+        ...item,
+        createTime,
+        content,
+        digestId
+      }
     })
-    const messageList = dataBeforeFormatter.map(item => {
+    refineMessages = refineMessages.filter(item => item !== -1000)
+    dataBeforeFormatter = dataBeforeFormatter.concat(refineMessages)
+
+
+    let messageList = dataBeforeFormatter.map(item => {
       return {
         ...item,
         date: new Date(item.createTime).format('MM月dd日 hh:mm')
       }
     })
-    this.setData({ loading: false })
+    if (page.data.pageNum > 1)
+      messageList = page.data.messageList.concat(messageList)
+    messageList.sort((a, b) => {
+      const btime = new Date(b.createTime)
+      const atime = new Date(a.createTime)
+      return btime.getTime() - atime.getTime()
+    })
+    console.log('finaldata', messageList)
+    this.setData({
+      loading: false
+    })
     this.setData({
       messageList
     })
@@ -122,13 +152,16 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function() {
-
+    this.data.pageNum += 1
+    this.getMessages()
   },
 
   /**
    * 用户点击右上角分享
    */
   onShareAppMessage: function() {
-
+    return {
+      title: ' '
+    }
   }
 })

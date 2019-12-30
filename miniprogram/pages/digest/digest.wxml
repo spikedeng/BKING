@@ -14,11 +14,10 @@
   <view class="origin" wx:else>
     <input placeholder="添加出处信息" bindfocus="onOriginFocusing" bindblur="onOriginBlur" bindinput="onOriginChange" style="font-weight: bold"></input>
   </view>
-  <block wx:if="{{scene!=='refine'&&scene!=='mailbox'}}">
+  <block wx:if="{{scene!=='refine'&&scene!=='mailbox'&&!share}}">
     <view class="{{buttonAnimate?'main-round-button-animated':'main-round-button'}}" bindtap="onTapMainButton"></view>
-    <!-- <view class="main-round-button-disable" wx:else></view> -->
   </block>
-  <block wx:else>
+  <block wx:elif="{{scene!=='booknote'&&!bulletin}}">
     <view class="lightbulb-main" bindtap="onTapLightBulb">
       <image src="{{bulbLighted?'/images/bulb-light.png':'/images/bulb-dark.png'}}"></image>
     </view>

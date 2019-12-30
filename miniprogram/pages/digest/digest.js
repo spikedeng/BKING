@@ -31,6 +31,11 @@ Page({
     if (digestId) {
       this.loadDigest(digestId, scene)
       this.configLightStatus(digestId)
+      this.setData({
+        digestId,
+        scene,
+        share: true
+      })
     } else {
       const eventChannel = this.getOpenerEventChannel()
       if (eventChannel && eventChannel.on)
@@ -71,7 +76,7 @@ Page({
         scene
       }
     }).then(res => {
-      console.log('digestcontent', page.data.digestId)
+      console.log('digestcontent', page.data.digestId, res)
       this.configLightStatus()
       this.setData({
         ...res.result
@@ -311,7 +316,7 @@ Page({
     const buttonAnimate = wx.getStorage({
       key: 'buttonAnimate',
       success: function(res) {
-        console.log('buttonAnimate',res)
+        console.log('buttonAnimate', res)
       },
       fail(res) {
         page.setData({
@@ -324,16 +329,17 @@ Page({
   async configLightStatus(digestIdP) {
     const page = this
     const digestId = digestIdP || page.data.digestId
-    if (!digestId) return
-    console.log('configLightStatus', digestId)
+    const OPENID = getApp().globalData.OPENID
+    if (!digestId || !OPENID) return
+    console.log('configLightStatus', digestId, OPENID)
     const result = await wx.cloud.database({
       env: wx.cloud.DYNAMIC_CURRENT_ENV
     }).collection('lights').where({
-      OPENID: getApp().globalData.OPENID,
+      OPENID,
       digestId
     }).get()
     console.log('lightstatus', result.data)
-    if (result.data.length) {
+    if (result.data.length === 1) {
       const lightData = result.data[0]
       page.setData({
         bulbLighted: lightData.operation === 'on'
@@ -397,6 +403,10 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function() {
+    // const {
+    //   isCommittee
+    // } = getApp().globalData
+    // if (!isCommittee && scene === 'mailbox') return null
     const {
       digestId,
       scene,

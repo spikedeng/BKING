@@ -7,11 +7,14 @@ cloud.init()
 exports.main = async(event, context) => {
   const wxContext = cloud.getWXContext()
   const db = cloud.database()
+  const {
+    pageNum = 1
+  } = event
   const resp = await db.collection('digests')
   .orderBy('createTime', 'desc')
   .where({
     OPENID: wxContext.OPENID
-  }).get()
+    }).limit(10).skip((pageNum - 1) * 10).get()
   const result = resp.data.map(item => {
     const {
       content,

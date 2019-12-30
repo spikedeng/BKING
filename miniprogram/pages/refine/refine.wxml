@@ -7,7 +7,7 @@
     <p wx:if="{{loading}}">精选载入中...</p>
   </view>
   <view class="digestsArray-container">
-    <view wx:for="{{digestsArray}}" class="digest-container" bindtap="onTapDigestCard" data-digest="{{item}}" wx:key="{{item.createTime}}">
+    <view wx:for="{{digestsArray}}" hover-class="digest-container-hover" class="digest-container" bindtap="onTapDigestCard" data-digest="{{item}}" wx:key="{{item.createTime}}">
       <view class="digest-header">
         <view class="date">{{item.date}}</view>
         <view class="light-count-wrapper">
@@ -20,7 +20,9 @@
         </view>
       </view>
       <view class="content">{{item.content}}</view>
-      <image class="image" src="{{item.image}}" mode="aspectFill"></image>
+      <view class="image" wx:if="{{item.image}}">
+        <image src="{{item.image}}" mode="aspectFill"></image>
+      </view>
     </view>
   </view>
 

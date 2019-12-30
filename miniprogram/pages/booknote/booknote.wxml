@@ -2,15 +2,11 @@
 <view class="container">
   <view class="header">
     <view class="page-title">笔记</view>
-    <!-- <view class="sidebutton" bindtap="onNewButton" wx:if="{{!loading}}">
-      <span style="margin: 0 20rpx 0 0;font-size: 48rpx">+</span>
-      <span>新建笔记</span>
-    </view> -->
   </view>
 
 
   <view class="digestsArray-container">
-    <view class="newbutton" bindtap="onNewButton">
+    <view class="newbutton" bindtap="onNewButton" hover-class="newbutton-hover">
       <span style="margin: 0 20rpx 0 0;font-size: 48rpx">+</span>
       <span>新建笔记</span>
     </view>

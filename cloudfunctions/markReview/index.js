@@ -18,7 +18,8 @@ exports.main = async(event, context) => {
       data: {
         operation: 'off',
         digestId,
-        OPENID: wxContext.OPENID
+        OPENID: wxContext.OPENID,
+        createTime: cloud.database().serverDate(),
       }
     })
     const _ = cloud.database().command
