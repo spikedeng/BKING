@@ -27,10 +27,10 @@
     <view class="lights-count">{{lights}}</view>
   </block>
   <view class="digest-main-image" bindtap="onImageSelect">
-    <view class="inner-wrapper" wx:if="{{uploadedImagePath&&content.length}}">
+    <view class="inner-wrapper" wx:if="{{uploadedImagePath}}">
       <image src="{{uploadedImagePath}}" mode="aspectFill"></image>
     </view>
-    <view style='width: 48rpx; height: 48rpx;' wx:elif="{{editing}}">
+    <view style='width: 48rpx; height: 48rpx;' wx:elif="{{editing&&!uploadedImagePath}}">
       <image src="../../images/camera.png" mode="aspectFit"></image>
     </view>
   </view>

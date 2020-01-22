@@ -34,23 +34,19 @@ exports.main = async(event, context) => {
   console.log('sameuser', sameUser)
   const userDataAry = sameUser.data
   if (userDataAry.length == 0) {
+    const newUserData = {
+      OPENID,
+      APPID,
+      UNIONID,
+      lights: 1,
+      createTime: cloud.database().serverDate(),
+      isCommittee: false,
+    }
     const result = await users.add({
-      data: {
-        OPENID,
-        APPID,
-        UNIONID,
-        lights: 1,
-        createTime: cloud.database().serverDate(),
-        isCommittee: false,
-      }
+      data: newUserData
     })
     console.log('useraddresult', result)
-    return {
-      OPENID,
-      lights: 0,
-      isComittee: true,
-      newUser: true
-    }
+    return newUserData
   } else {
     await users.where({
       OPENID

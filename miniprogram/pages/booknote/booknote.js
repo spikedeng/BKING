@@ -111,7 +111,7 @@ Page({
         console.error("[云函数] [sum] 调用失败：", err);
       },
       complete: res => {
-        this.setData({loading: f})
+        this.setData({loading: false})
       }
     });
   },

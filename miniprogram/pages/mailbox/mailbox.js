@@ -92,7 +92,7 @@ Page({
       if (item.OPENID === OPENID) {
         content = briefId + '稿件已送出，' + '还差' + (4 - item.lights) + '盏灯就能成为精选哦'
       }
-      else if (!isCommittee && item.bulletin.length === 0)
+      else if (!isCommittee && !item.bulletin)
         return -1000
       if(item.bulletin) content = item.bulletin
       return {

@@ -8,6 +8,7 @@ Page({
     // content: '',
     content: '',
     image: '',
+    imgSecFailed: false,
     origin: '',
     scene: 'refine',
     editing: false,
@@ -98,27 +99,30 @@ Page({
         success(res) {
           // tempFilePath可以作为img标签的src属性显示图片
           const [path] = res.tempFilePaths
-          const pathAry = path.split('/')
-          console.log('pathary', pathAry);
           wx.showNavigationBarLoading()
-          wx.cloud.uploadFile({
-            cloudPath: pathAry[pathAry.length - 1], // 上传至云端的路径
-            filePath: path, // 小程序临时文件路径
-            success(res) {
-              // 返回文件 ID
-              console.log('cloudfileuploadsucc', res, this)
-              page.setData({
-                uploadedImagePath: res.fileID
-              })
-            },
-            complete: res => {
-              wx.hideNavigationBarLoading()
-            }
-          })
-
+          page.imgcheck(path)
         }
       })
     }
+  },
+
+  uploadImage(path) {
+    const page = this
+    const pathAry = path.split('/')
+    wx.cloud.uploadFile({
+      cloudPath: pathAry[pathAry.length - 1], // 上传至云端的路径
+      filePath: path, // 小程序临时文件路径
+      success(res) {
+        // 返回文件 ID
+        console.log('cloudfileuploadsucc', res, page)
+        page.setData({
+          uploadedImagePath: res.fileID
+        })
+      },
+      complete: res => {
+        wx.hideNavigationBarLoading()
+      }
+    })
   },
 
   onTapLightBulb() {
@@ -232,6 +236,38 @@ Page({
     })
   },
 
+  imgcheck(path) {
+    const page = this
+    const typeArry = path.split('.')
+    const type = typeArry[typeArry.length-1]
+    const fs = wx.getFileSystemManager();
+    fs.readFile({
+      filePath: path,
+      encoding: 'base64',
+      success: function (res) {
+        wx.cloud.callFunction({
+          name: 'imgSec',
+          data: { content: res.data, type },
+        }).then(res => {
+          wx.hideNavigationBarLoading()
+          if (res && res.result && res.result.code !== 0) {
+            wx.showToast({
+              title: '图片不合法',
+              icon: 'none'
+            })
+            page.setData({
+              imgSecFailed: true
+            })
+          } else {
+            page.uploadImage(path)
+          }
+        }).complete(res=>{
+          wx.hideNavigationBarLoading()
+        })
+      }
+    });
+  },
+
   saveDigest(applyAlong) {
     const page = this
     const {
@@ -254,17 +290,28 @@ Page({
       },
       success: res => {
         console.log('saveDigest', res)
-        if (applyAlong) {
-          page.applyRefine(res.result.digestId)
-        } else
-          wx.showToast({
-            title: '保存成功',
-            success(res) {
-              wx.navigateBack({
+        if (res.result.msg === '保存成功') {
+          if (applyAlong) {
+            page.applyRefine(res.result.digestId)
+          } else {
+            wx.showToast({
+              title: '保存成功',
+              success(res) {
+                setTimeout(() => {
+                  wx.navigateBack({
 
-              })
-            }
+                  })
+                }, 500)
+
+              }
+            })
+          }
+        } else {
+          wx.showToast({
+            icon: 'none',
+            title: res.result.msg,
           })
+        }
       },
       fail: err => {
         wx.showToast({
@@ -369,34 +416,6 @@ Page({
     this.setData({
       originFocusing: false
     })
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function() {
-
   },
 
   /**
