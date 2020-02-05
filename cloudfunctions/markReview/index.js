@@ -13,8 +13,10 @@ exports.main = async(event, context) => {
   } = event
   const lightCl = cloud.database().collection('lights')
   const lightQuery = await lightCl.where({
-    digestId
+    digestId,
+    OPENID: wxContext.OPENID
   }).get()
+  // console.log('lightQuery', lightQuery.data)
   if (!lightQuery.data.length) {
     await lightCl.add({
       data: {

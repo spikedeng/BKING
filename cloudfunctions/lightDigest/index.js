@@ -18,13 +18,16 @@ exports.main = async(event, context) => {
   const {
     published,
     lights,
+    createTime,
     OPENID
   } = digestData.data
+  const db = cloud.database()
   const needPublish = published === false && lights === 3 && operation === 'on'
   const lightresp = await digest.update({
     data: {
       lights: _.inc(operation === 'off' ? -1 : 1),
-      published: needPublish ? true : published
+      published: needPublish ? true : published,
+      createTime: needPublish ? db.serverDate() : createTime
     }
   })
   await cloud.callFunction({
