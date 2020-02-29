@@ -27,8 +27,13 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
+    let globalData = getApp().globalData
+    if (globalData.afterBrowse === true) {
+      globalData.afterBrowse = false
+    } else {
     this.data.pageNum = 1
     this.loadRefineList()
+    }
   },
 
   /**

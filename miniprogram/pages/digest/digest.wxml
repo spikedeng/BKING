@@ -4,7 +4,7 @@
     {{content}}
   </view>
   <view class="digest-main-content" wx:if="{{editing}}">
-    <textarea placeholder="撰写摘要笔记" value="{{textareaValue}}" maxlength="300" bindinput="onContentChange" style="height: 780rpx; min-height: 500rpx">
+    <textarea placeholder="撰写摘要笔记" value="{{textareaValue}}" maxlength="600" bindinput="onContentChange" style="height: 780rpx; min-height: 500rpx">
     </textarea>
   </view>
   <view class="line"></view>

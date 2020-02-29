@@ -44,9 +44,14 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
-    this.data.pageNum = 1
-    this.getMessages()
     const page = this
+    let globalData = getApp().globalData
+    if (globalData.afterBrowse === true) {
+      globalData.afterBrowse = false
+    } else {
+    page.data.pageNum = 1
+    page.getMessages()
+    }
     wx.cloud.callFunction({
       name: 'login',
       success(res) {

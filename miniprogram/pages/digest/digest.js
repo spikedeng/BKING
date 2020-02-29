@@ -239,15 +239,18 @@ Page({
   imgcheck(path) {
     const page = this
     const typeArry = path.split('.')
-    const type = typeArry[typeArry.length-1]
+    const type = typeArry[typeArry.length - 1]
     const fs = wx.getFileSystemManager();
     fs.readFile({
       filePath: path,
       encoding: 'base64',
-      success: function (res) {
+      success: function(res) {
         wx.cloud.callFunction({
           name: 'imgSec',
-          data: { content: res.data, type },
+          data: {
+            content: res.data,
+            type
+          },
         }).then(res => {
           wx.hideNavigationBarLoading()
           if (res && res.result && res.result.code !== 0) {
@@ -261,7 +264,7 @@ Page({
           } else {
             page.uploadImage(path)
           }
-        }).complete(res=>{
+        }).complete(res => {
           wx.hideNavigationBarLoading()
         })
       }
@@ -269,6 +272,10 @@ Page({
   },
 
   saveDigest(applyAlong) {
+    this.setData({
+      saveTried: true
+    })
+    wx.showNavigationBarLoading()
     const page = this
     const {
       content,
@@ -278,6 +285,7 @@ Page({
     if (!content) {
       wx.showToast({
         title: '未填写内容',
+        icon: 'none'
       })
       return
     }
@@ -289,6 +297,7 @@ Page({
         origin
       },
       success: res => {
+        wx.hideNavigationBarLoading()
         console.log('saveDigest', res)
         if (res.result.msg === '保存成功') {
           if (applyAlong) {
@@ -314,6 +323,7 @@ Page({
         }
       },
       fail: err => {
+        wx.hideNavigationBarLoading()
         wx.showToast({
           icon: 'none',
           title: '保存失败',
@@ -325,6 +335,7 @@ Page({
 
   applyRefine(digestId) {
     const page = this
+    wx.showNavigationBarLoading()
     wx.cloud.callFunction({
       name: 'applyRefine',
       data: {
@@ -332,14 +343,18 @@ Page({
       },
       success(res) {
         console.log('applySucc', res)
+        wx.hideNavigationBarLoading()
         wx.showToast({
           title: res.result.message,
           success(res) {
-            wx.navigateBack()
+            setTimeout(() => {
+              wx.navigateBack()
+            }, 500)
           }
         })
       },
       fail(res) {
+        wx.hideNavigationBarLoading()
         console.log('applyfail', res)
       }
     })
@@ -371,6 +386,8 @@ Page({
         })
       }
     })
+    let globalData = getApp().globalData
+    globalData.afterBrowse = true
   },
 
   async configLightStatus(digestIdP) {
@@ -418,6 +435,15 @@ Page({
     })
   },
 
+  onUnload: function() {
+    if (this.data.creating) {
+      let globalData = getApp().globalData
+      globalData.afterBrowse = false
+      if (!this.data.saveTried) {
+        this.saveDigest()
+      }
+    }
+  },
   /**
    * 用户点击右上角分享
    */

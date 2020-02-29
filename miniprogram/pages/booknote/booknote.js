@@ -6,7 +6,7 @@ Page({
   data: {
     digestsArray: [],
     loading: false,
-    pageNum:1
+    pageNum: 1
   },
   onNewButton() {
     wx.navigateTo({
@@ -14,7 +14,8 @@ Page({
       success: function(res) {
         res.eventChannel.emit('acceptDataFromOpenerPage', {
           editing: true,
-          scene: 'booknote'
+          scene: 'booknote',
+          creating: true
         })
       }
     })
@@ -86,7 +87,9 @@ Page({
 
   loadMyNotes() {
     const page = this;
-    this.setData({loading: true})
+    this.setData({
+      loading: true
+    })
     wx.cloud.callFunction({
       name: "myBooknotes",
       data: {
@@ -111,7 +114,9 @@ Page({
         console.error("[云函数] [sum] 调用失败：", err);
       },
       complete: res => {
-        this.setData({loading: false})
+        this.setData({
+          loading: false
+        })
       }
     });
   },
@@ -125,8 +130,16 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
-    this.data.pageNum = 1
-    this.loadMyNotes()
+    let globalData = getApp().globalData
+    if (globalData.afterBrowse === true) {
+      globalData.afterBrowse = false
+    } else {
+      setTimeout(() => {
+        this.data.pageNum = 1
+        this.loadMyNotes()
+
+      }, 500)
+    }
   },
 
   /**
@@ -156,7 +169,7 @@ Page({
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
+  onShareAppMessage: function() {
     return {
       title: ' '
     }
