@@ -1,8 +1,8 @@
 <!--miniprogram/pages/digest/digest.wxml-->
 <view class="container">
-  <view class="digest-main-content" wx:if="{{!editing}}">
+  <text class="digest-main-content" style="margin-top: -50rpx;" wx:if="{{!editing}}" selectable="true" decode="true">
     {{content}}
-  </view>
+  </text>
   <view class="digest-main-content" wx:if="{{editing}}">
     <textarea placeholder="撰写摘要笔记" value="{{textareaValue}}" maxlength="600" bindinput="onContentChange" style="height: 780rpx; min-height: 500rpx">
     </textarea>

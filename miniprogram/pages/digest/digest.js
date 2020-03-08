@@ -436,12 +436,12 @@ Page({
   },
 
   onUnload: function() {
-    if (this.data.creating) {
+    if (this.data.creating||this.data.share) {
       let globalData = getApp().globalData
       globalData.afterBrowse = false
-      if (!this.data.saveTried) {
-        this.saveDigest()
-      }
+    }
+    if (this.data.creating&&!this.data.saveTried) {
+      this.saveDigest()
     }
   },
   /**

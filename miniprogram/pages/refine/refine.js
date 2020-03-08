@@ -77,6 +77,9 @@ Page({
 
   loadRefineList() {
     const page = this;
+    this.setData({
+      loading: true
+    })
     wx.cloud.callFunction({
       name: "refineList",
       data: {
@@ -96,7 +99,12 @@ Page({
         });
         console.log("refinelist", res);
       },
-      fail: err => {}
+      fail: err => {},
+      complete: res => {
+        this.setData({
+          loading: false
+        })
+      }
     });
   },
   /**
