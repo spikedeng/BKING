@@ -13,7 +13,7 @@ exports.main = async(event, context) => {
   const db = cloud.database()
   const resp = await db.collection('messages').orderBy('createTime', 'desc').where({
     OPENID: wxContext.OPENID
-  }).limit(10).skip((pageNum - 1) * 10).get()
+  }).limit(20).skip((pageNum - 1) * 20).get()
   const result = resp.data.map(item => {
     const {
       content,

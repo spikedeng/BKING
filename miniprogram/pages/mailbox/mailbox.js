@@ -45,18 +45,19 @@ Page({
    */
   onShow: function() {
     const page = this
-    let globalData = getApp().globalData
-    if (globalData.afterBrowse === true) {
-      globalData.afterBrowse = false
-    } else {
-    page.data.pageNum = 1
-    page.getMessages()
-    }
+
     wx.cloud.callFunction({
       name: 'login',
       success(res) {
         console.log('loginsucc', res);
         getApp().globalData = { ...res.result
+        }
+        let globalData = getApp().globalData
+        if (globalData.afterBrowse === true) {
+          globalData.afterBrowse = false
+        } else {
+          page.data.pageNum = 1
+          page.getMessages()
         }
         page.setData({
           lightsCount: getApp().globalData.lights
@@ -82,20 +83,27 @@ Page({
         pageNum: page.data.pageNum
       }
     })
-    dataBeforeFormatter = dataBeforeFormatter.concat(messagesRes.result)
+    let messages = messagesRes.result.map(item=>{
+      let fold = wx.getStorageSync(item.digestId)
+      // let fold = false
+      return {...item, fold}
+    })
+    dataBeforeFormatter = dataBeforeFormatter.concat(messages)
     let refinesRes = await wx.cloud.database().collection('refines').orderBy('createTime', 'desc').where({
       published: false
-    }).limit(10).skip((page.data.pageNum - 1) * 10).get()
+    }).limit(20).skip((page.data.pageNum - 1) * 20).get()
 
     let refineMessages = refinesRes.data.map(item => {
       const {
         createTime,
         digestId
       } = item
+      let fold = wx.getStorageSync(digestId)
       const briefId = digestId.slice(digestId.length - 6, digestId.length - 1)
-      let content = '你有一条投稿需要审阅, 投稿Id:' + briefId
+      let content = fold?'投稿Id:'+briefId+'已阅':'你有一条投稿需要审阅, 投稿Id:' + briefId
       if (item.OPENID === OPENID) {
-        content = briefId + '稿件已送出，' + '还差' + (4 - item.lights) + '盏灯就能成为精选哦'
+        content = briefId + '稿件已送出，' + '还需' + (4 - item.lights) + '盏灯成为精选'
+        // fold = true
       }
       else if (!isCommittee && !item.bulletin)
         return -1000
@@ -104,9 +112,12 @@ Page({
         ...item,
         createTime,
         content,
-        digestId
+        digestId,
+        fold,
+        needRead: fold?false:true
       }
     })
+
     refineMessages = refineMessages.filter(item => item !== -1000)
     dataBeforeFormatter = dataBeforeFormatter.concat(refineMessages)
 
