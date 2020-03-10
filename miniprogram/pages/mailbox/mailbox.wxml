@@ -15,7 +15,8 @@
     <p wx:if="{{loading}}">邮件载入中...</p>
   </view>
   <view class="message-list-wrapper">
-    <view wx:for="{{messageList}}" wx:key="index" hover-class="message-wrapper-hover" class="message-wrapper" bindtap="onTapMessage" data-message="{{item}}">
+    <view wx:for="{{messageList}}" wx:key="index" hover-class="message-wrapper-hover" class="{{item.fold?'message-fold':'message-wrapper'}}" bindtap="onTapMessage" 
+    style="{{item.needRead?'border: 1px solid #3C808B;border-right:none;':''}}" data-message="{{item}}">
       <view class="date">{{item.date||'12月19日'}}</view>
       <view class="content">{{item.content}}</view>
       <view class="image"><image src="{{item.uploadedImagePath}}" mode="aspectFill"></image></view>

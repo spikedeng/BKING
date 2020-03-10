@@ -66,6 +66,9 @@ Page({
         digestId
       }
     })
+    wx.setStorage({key:digestId, data:true})
+    let globalData = getApp().globalData
+    globalData.afterBrowse = false
   },
 
   loadDigest(digestId, scene) {
