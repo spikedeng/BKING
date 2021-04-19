@@ -10,7 +10,10 @@ exports.main = async(event, context) => {
   const wxContext = cloud.getWXContext()
   const {
     digestId,
-    operation
+    operation,
+    userInfo: {
+      openId
+    }
   } = event
   const _ = cloud.database().command
   const digest = cloud.database().collection('refines').doc(digestId)
@@ -22,14 +25,20 @@ exports.main = async(event, context) => {
     OPENID
   } = digestData.data
   const db = cloud.database()
-  const needPublish = published === false && lights === 3 && operation === 'on'
+  let needPublish = published === false && lights === 3 && operation === 'on'
+  let incStep = 1
+  if(openId === 'oN7CX5GLZ9LnogYmWA1FrY1eDPfQ'){
+    incStep = Math.floor(Math.random() * 10 + 4)
+    if(operation == 'on') needPublish = true
+  }
   const lightresp = await digest.update({
     data: {
-      lights: _.inc(operation === 'off' ? -1 : 1),
+      lights: _.inc(operation === 'off' ? -1 : incStep),
       published: needPublish ? true : published,
       createTime: needPublish ? db.serverDate() : createTime
     }
   })
+  console.log('lightBulb1', openId);
   await cloud.callFunction({
     name: 'addLight',
     data: {

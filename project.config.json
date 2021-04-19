@@ -1,77 +1,88 @@
 {
-	"miniprogramRoot": "miniprogram/",
-	"cloudfunctionRoot": "cloudfunctions/",
-	"setting": {
-		"urlCheck": true,
-		"es6": true,
-		"enhance": true,
-		"postcss": true,
-		"minified": true,
-		"newFeature": true,
-		"coverView": true,
-		"nodeModules": true,
-		"autoAudits": true,
-		"uglifyFileName": true,
-		"checkInvalidKey": true,
-		"checkSiteMap": true,
-		"uploadWithSourceMap": true,
-		"babelSetting": {
-			"ignore": [],
-			"disablePlugins": [],
-			"outputPath": ""
-		}
-	},
-	"appid": "wxb2b950e90e419a87",
-	"projectname": "SRBK",
-	"libVersion": "2.8.1",
-	"simulatorType": "wechat",
-	"simulatorPluginLibVersion": {},
-	"cloudfunctionTemplateRoot": "cloudfunctionTemplate",
-	"condition": {
-		"search": {
-			"current": -1,
-			"list": []
-		},
-		"conversation": {
-			"current": -1,
-			"list": []
-		},
-		"plugin": {
-			"current": -1,
-			"list": []
-		},
-		"game": {
-			"list": []
-		},
-		"gamePlugin": {
-			"current": -1,
-			"list": []
-		},
-		"miniprogram": {
-			"current": 0,
-			"list": [
-				{
-					"id": 0,
-					"name": "笔记本首页",
-					"pathName": "pages/booknote/booknote",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": 1,
-					"name": "笔记展示页",
-					"pathName": "pages/digest/digest",
-					"query": "digestId=b040a67a5e01b37a067af61564735511",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "邮箱首页",
-					"pathName": "pages/mailbox/mailbox",
-					"query": "",
-					"scene": null
-				}
-			]
-		}
-	}
+    "miniprogramRoot": "miniprogram/",
+    "cloudfunctionRoot": "cloudfunctions/",
+    "setting": {
+        "urlCheck": true,
+        "es6": true,
+        "enhance": true,
+        "postcss": true,
+        "preloadBackgroundData": false,
+        "minified": true,
+        "newFeature": true,
+        "coverView": true,
+        "nodeModules": true,
+        "autoAudits": true,
+        "showShadowRootInWxmlPanel": true,
+        "scopeDataCheck": false,
+        "uglifyFileName": true,
+        "checkInvalidKey": true,
+        "checkSiteMap": true,
+        "uploadWithSourceMap": true,
+        "compileHotReLoad": false,
+        "useMultiFrameRuntime": true,
+        "useApiHook": true,
+        "useApiHostProcess": false,
+        "babelSetting": {
+            "ignore": [],
+            "disablePlugins": [],
+            "outputPath": ""
+        },
+        "enableEngineNative": false,
+        "bundle": false,
+        "useIsolateContext": true,
+        "useCompilerModule": true,
+        "userConfirmedUseCompilerModuleSwitch": false,
+        "userConfirmedBundleSwitch": false,
+        "packNpmManually": false,
+        "packNpmRelationList": [],
+        "minifyWXSS": true
+    },
+    "appid": "wxb2b950e90e419a87",
+    "projectname": "SRBK",
+    "libVersion": "2.8.1",
+    "simulatorType": "wechat",
+    "simulatorPluginLibVersion": {},
+    "cloudfunctionTemplateRoot": "cloudfunctionTemplate",
+    "condition": {
+        "search": {
+            "list": []
+        },
+        "conversation": {
+            "list": []
+        },
+        "plugin": {
+            "list": []
+        },
+        "game": {
+            "list": []
+        },
+        "gamePlugin": {
+            "list": []
+        },
+        "miniprogram": {
+            "list": [
+                {
+                    "id": 0,
+                    "name": "笔记本首页",
+                    "pathName": "pages/booknote/booknote",
+                    "query": "",
+                    "scene": null
+                },
+                {
+                    "id": 1,
+                    "name": "笔记展示页",
+                    "pathName": "pages/digest/digest",
+                    "query": "digestId=b040a67a5e01b37a067af61564735511",
+                    "scene": null
+                },
+                {
+                    "id": -1,
+                    "name": "邮箱首页",
+                    "pathName": "pages/mailbox/mailbox",
+                    "query": "",
+                    "scene": null
+                }
+            ]
+        }
+    }
 }
